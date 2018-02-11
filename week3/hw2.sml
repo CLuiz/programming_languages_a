@@ -42,7 +42,7 @@ fun similar_names (xss : string list list,
 		   full_name : {first:string,
 				middle:string,
 				last:string}) =
-    xss
+    full_name
     
 (* you may assume that Num is always used with values 2, 3, ..., 10
    though it will not really come up *)
@@ -70,8 +70,11 @@ fun card_value (card) =
       | _  => 10
 		  
 fun remove_card (cs, c, exp) =
-    case cs of
-	x :: cs => cs
+    case cs
+     of [] => raise exp
+      | x :: cs => case x = c
+		    of true => cs
+		    | false => x :: remove_card(cs, c, exp) 
 	
 fun all_same_color (cs) =
     case cs of
@@ -88,16 +91,16 @@ fun sum_cards (cs) =
     in
 	f(cs,0)
     end
-(*
-fun score (cs : list, goal : Num) =
+
+fun score (cs : card list, goal : int) =
     let
 	val sum = sum_cards(cs)		     
     in
 	if all_same_color(cs)
-	then sum / 2 
-	if sum > goal
+	then sum div 2 
+	else if sum > goal
 	then (sum + goal) * 3
-	else if sum < goal
-	then goal - sum	    
+	else goal - sum	    
     end
-*)
+	
+	
