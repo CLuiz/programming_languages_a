@@ -8,7 +8,7 @@ fun same_string (s1 : string, s2 : string) =
 	     
 (* put your solutions for problem 1 here *)
 		      
-fun all_except_option(s, xs) =
+fun all_except_option (s, xs) =
     case xs
      of [] => NONE
       | x::xs  =>
@@ -42,8 +42,8 @@ fun similar_names (xss : string list list,
 		   full_name : {first:string,
 				middle:string,
 				last:string}) =
-    full_name
-    
+    [full_name, full_name]
+			      
 (* you may assume that Num is always used with values 2, 3, ..., 10
    though it will not really come up *)
 datatype suit = Clubs | Diamonds | Hearts | Spades
@@ -91,19 +91,8 @@ fun sum_cards (cs) =
     in
 	f(cs,0)
     end
-
-fun score (cs : card list, goal : int) =
-    let
-	val sum = sum_cards(cs)		     
-    in
-	if all_same_color(cs)
-	then sum div 2 
-	else if sum > goal
-	then (sum + goal) * 3
-	else goal - sum	    
-    end
 	
-fun score1 (cs : card list, goal : int) =
+fun score (cs : card list, goal : int) =
     let
 	val sum = sum_cards(cs)
         val sum_greater = sum > goal
@@ -121,3 +110,12 @@ val c3 : card = (Spades, King)
 
 val cs1 = [c1, c2]
 val cs2 = [c1, c2, c3]
+
+fun officiate (cards : card list, moves : move list, goal : int) =
+    let
+	fun play_again(cards : card list, held : card list, moves : move list, goal : int) =
+	    1
+    in
+	if play_again([], [], [], 5) = 0 then 0 else 1
+    end
+	
