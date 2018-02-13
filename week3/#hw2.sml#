@@ -117,5 +117,5 @@ val cs1 = [c1, c2]
 val cs2 = [c1, c2, c3]
 
 fun officiate (cards : card list, moves : move list, goal : int) =
-    1
+   
 	

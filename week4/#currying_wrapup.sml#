@@ -1,0 +1,15 @@
+fun range (i, j) = if i > j then [] else i :: range(i + 1, j)
+
+
+						   
+val countup = range 1 (* won't work *)
+(* write simple currying function to fix operation *)
+fun curry f x y = f (x y)
+				
+val countup_works = curry range 1
+val xs = countup 7
+
+fun uncurry f (x, y) = f x y
+
+fun other_curry f x y = f y x
+			  
