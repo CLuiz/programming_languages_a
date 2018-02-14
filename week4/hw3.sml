@@ -70,3 +70,43 @@ fun first_answer f xs =
 		    | SOME v => v
 
 				    
+fun all_answers f xss =
+    let fun answer_helper (xs, acc) =
+	    case xs
+	     of [] => SOME acc
+	      | x :: xs' => case f x
+			     of NONE => NONE
+			      | SOME(y) => answer_helper(xs', acc @ y)
+    in
+	answer_helper(xss, []) 
+    end
+
+
+(* fun g provided for use in part 2 of hw *)
+fun g f1 f2 p =
+    let
+	val r = g f1 f2
+    in
+	case p of
+	    Wildcard          => f1 ()
+	  | Variable x        => f2 x
+	  | TupleP ps         => List.foldl (fn (p,i) => (r p) + i) 0 ps
+	  | ConstructorP(_,p) => r p
+	  | _                 => 0
+    end
+
+
+val count_wildcards = g (fn () => 1) (fn x => 0)
+
+val count_wild_and_variable_lengths = g (fn () => 1) (fn y => String.size y)
+
+fun count_some_vars (s, p) = g (fn () => 0) (fn x => if x=s then 1 else 0) p
+
+fun check_pat p =
+    true
+(*
+fun match (v, p) =
+    case (v, p)
+     of (_, Wildcard) => SOME
+     |  => 
+*)
