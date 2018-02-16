@@ -81,7 +81,7 @@ fun all_answers f xss =
 	answer_helper(xss, []) 
     end
 
-
+(*
 (* fun g provided for use in part 2 of hw *)
 fun g f1 f2 p =
     let
@@ -94,19 +94,41 @@ fun g f1 f2 p =
 	  | ConstructorP(_,p) => r p
 	  | _                 => 0
     end
-
+*)
 
 val count_wildcards = g (fn () => 1) (fn x => 0)
 
 val count_wild_and_variable_lengths = g (fn () => 1) (fn y => String.size y)
 
-fun count_some_vars (s, p) = g (fn () => 0) (fn x => if x=s then 1 else 0) p
+fun count_some_var (s, p) = g (fn () => 0) (fn x => if x=s then 1 else 0) p
 
 fun check_pat p =
-    true
+    let
+	fun get_vars (p) =
+	    case p
+	     of Variable x => [x]
+	      | TupleP ps => List.foldl (fn (p', acc) => acc @ get_vars(p')) [] ps
+	      | (_) => []
+	fun has_duplicates (xs) =
+	    case xs
+	     of [] => false
+	      | x :: xs' => List.exists (fn y => x=y) xs' orelse has_duplicates xs'
+    in
+	(not o has_duplicates o get_vars) p
+    end
 (*
-fun match (v, p) =
-    case (v, p)
-     of (_, Wildcard) => SOME
-     |  => 
+fun match vp =
+    case vp
+     of (_, Wildcard) => SOME []
+      | (v, Variable s) => [(s, v)] 
+      | _ => NONE
 *)
+fun check_pat3 (p) = 
+    let fun list_vars (Variable x) = [x]
+	  | list_vars (TupleP ps) = List.foldl (fn (p', acc) => acc @ list_vars(p')) [] ps
+	  | list_vars (_) = []
+	fun has_repeats ([]) = false
+	  | has_repeats (x::xs) = List.exists (fn x' => x = x') xs orelse has_repeats xs
+    in
+	(not o has_repeats o list_vars) p
+    end	
